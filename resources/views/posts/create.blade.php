@@ -17,7 +17,7 @@
                     </ul>
                 </div>
             @endif
-            <form action="{{ isset($post) ? route('posts.update', $post->id) : route('posts.store') }}" method="POST">
+            <form action="{{ isset($post) ? route('posts.update', $post->id) : route('posts.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 @if(isset($post))

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Http\Request;
+use App\Http\Requests\Posts\CreatePostRequest;
 
 class PostController extends Controller
 {
@@ -33,9 +34,20 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreatePostRequest $request)
     {
-        //
+        $image = $request->image->store('posts');
+        
+        Post::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'content' => $request->content,
+            'image' => $image
+        ]);
+
+        session()->flash('success', 'Post has been created successfully');
+
+        return redirect(route('posts.index'));
     }
 
     /**
@@ -55,9 +67,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $request)
     {
-        //
+        echo "hahaha"; exit;
     }
 
     /**
@@ -80,6 +92,22 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::withTrashed()->where('id', $id)->firstOrFail();
+
+        if($post->trashed()){
+            $post->forceDelete();
+        }else{
+            $post->delete();
+        }
+        
+        session()->flash('success', 'Post has been deleted successfully');
+
+        return redirect(route('posts.index'));
+    }
+
+    public function trashed(){
+
+        $trashed = Post::withTrashed()->get();
+        return view('posts.index')->with('posts',$trashed);
     }
 }
