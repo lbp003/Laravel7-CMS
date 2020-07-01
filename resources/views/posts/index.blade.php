@@ -14,15 +14,25 @@
                 <thead>
                     <th>Image</th>
                     <th>Title</th>
+                    <th>Category</th>
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
                 </thead>
                 <tbody>
                     @foreach ($posts as $post)
                         <tr>
-                            <td><img src="{{ asset('storage/'.$post->image) }}" alt="image" width="75px" height="75px" /></td>
+                            <td><img src="{{ asset('storage/'.$post->image) }}" alt="image" width="100px" height="auto" /></td>
                             <td>{{ $post->title}}</td>
-                            @if(!$post->trashed())
+                            <td>{{ isset($post->category->id) ? $post->category->name : '' }}</td>
+                            @if($post->trashed())
+                            <td class="d-flex justify-content-end">
+                                <form method="POST" action="{{ route('restore-posts', $post->id) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-primary btn-sm">Restore</button>
+                                </form>
+                            </td>
+                            @else
                             <td class="d-flex justify-content-end">
                                 <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-primary btn-sm">Edit</a>
                             </td>

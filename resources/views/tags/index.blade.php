@@ -2,14 +2,14 @@
 
 @section('content')
     <div class="d-flex justify-content-end mb-2">
-        <a href="{{ route('categories.create') }}" class="btn btn-success">Add Category</a>
+        <a href="{{ route('tags.create') }}" class="btn btn-success">Add Tag</a>
     </div>
     <div class="card card-default">
         <div class="card-header">
-            Categories
+            Tags
         </div>
         <div class="card-body">
-            @if($categories->count() > 0)
+            @if($tags->count() > 0)
             <table class="table">
                 <thead>
                     <th>Name</th>
@@ -17,20 +17,20 @@
                     <th></th>
                 </thead>
                 <tbody>
-                    @foreach ($categories as $category)
+                    @foreach ($tags as $tag)
                         <tr>
-                            <td>{{ $category->name }}</td>
-                            <td>{{ $category->post->count() }}</td>
+                            <td>{{ $tag->name }}</td>
+                            <td>{{ $tag->posts->count() }}</td>
                             <td class="d-flex justify-content-end">
-                                <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-primary btn-sm mr-2">Edit</a>
-                                <a href="#" class="btn btn-danger btn-sm" onclick="handleDelete({{ $category->id }})">Delete</a>
+                                <a href="{{ route('tags.edit', $tag->id) }}" class="btn btn-primary btn-sm mr-2">Edit</a>
+                                <a href="#" class="btn btn-danger btn-sm" onclick="handleDelete({{ $tag->id }})">Delete</a>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
             @else
-            <h3 class="text-center">No Categories yet</h3>
+            <h3 class="text-center">No Tags yet</h3>
             @endif
             <div class="modal" tabindex="-1" role="dialog" id="deleteModel">
                 <div class="modal-dialog" role="document">
@@ -40,7 +40,7 @@
 
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Delete Category</h5>
+                                <h5 class="modal-title">Delete Tag</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
@@ -62,7 +62,7 @@
         function handleDelete(id){
 
             var form = document.getElementById('deleteCategoryForm');
-            form.action = '/categories/'+id;
+            form.action = '/tags/'+id;
 
             $('#deleteModel').modal('show');
         }
